@@ -1,0 +1,147 @@
+<html>
+<head>
+	<title>alarm clock</title>
+	<link rel="stylesheet" type="text/css" href="clock-styles.css">
+	<link href="https://fonts.googleapis.com/css?family=Black+Ops+One" rel="stylesheet">
+ 	
+
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+			<!--	snooze button 	 -->
+<button id="snooze" onclick="pause()">snooze</button>
+
+
+			<!-- clock body -->
+<div id="clock">
+
+			<!-- turn on button -->
+	<button id="turnOn"></button>
+
+			<!-- display window -->
+	<div id="display"></div>
+
+			<!-- alarm inputs -->
+	<div id="setAlarm">
+		<input id="h" type="number" placeholder="hours">
+		<input id="m" type="number" placeholder="minutes">
+	</div>
+
+			<!-- footbox -->
+	<div id="footBox">
+		<div id="foot1"></div>
+		<div id="foot2"></div>
+	</div>
+</div>
+
+			<!-- audio source -->
+<audio id="audio"  loop="loop" src="alarm.wav"></audio>
+
+<script>
+	
+	//create time variables
+	var hours;
+	var mins;
+	var secs;
+
+//********************* start of display function ************************
+
+	function display() {
+
+		//get the value of the inputs and assign to variables(for alarm)
+		var m =  document.getElementById("m").value; 
+		var h =  document.getElementById("h").value; 
+
+		//assign the time object a variable for easy use
+		time = new Date(); 
+
+		//assign time variables
+		hours = time.getHours();
+		mins = time.getMinutes();
+		secs = time.getSeconds();
+
+		//add a zero to single digit numbers
+		function zeros(x) {
+			if (x < 10) 
+			{
+				return "0" + x;
+			} 
+			else 
+			{
+				return x;
+			}
+		}
+
+		//apply the zeros function
+		mins = zeros(mins);
+		secs = zeros(secs);
+
+		//initialize am variable
+		var am = "am";
+
+		//if hours is greater than 12(cancel 24 hour army clock)
+		if (hours > 12) 
+		{
+			//subtract 12
+			hours -= 12;
+
+			//assign pm to am
+			am = "pm";
+		}
+
+		//if hours is equal to 0
+		if(hours == 0)
+		{
+			//make it 12
+			hours = 12;
+		}
+
+        //if mins and hours is equal to the input values
+		if(m == mins && h == hours)
+		{
+			//sound the alarm
+			play()
+		}
+
+		//output the time to display div
+		$('#display').html(hours + ":" + mins + ":" + secs + " " + am)
+	}
+//********************** end of display function *********************
+
+
+	//make the clock run by 1 second
+	setInterval(display, 1000);
+
+
+	//function to play the alarm
+	function play() {
+		var sound = document.getElementById("audio");
+		sound.play()
+    }
+
+    //function to snooze the alarm
+	function pause() {
+		var sound = document.getElementById("audio");
+		sound.pause()
+	}
+
+	//when button clicked
+	$('#turnOn').click(function(){
+		var clicked = true;
+
+		if(clicked) 
+		{
+			//chnage color to yellow to show on
+			$(this).css('background-color', 'yellow');
+
+			//display the timer
+			$('#display').css('display', 'block');
+			clicked = false;
+		}
+	});
+</script>
+
+</body>
+</html>
